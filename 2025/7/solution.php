@@ -2,6 +2,7 @@
    function solve($file){
       $lines = parse($file);
       echo "part1: " . part1($lines) . "\n";
+      echo "part2: " . part2($lines) . "\n";
    }
    function part1($lines){
       $total = 0;
@@ -13,6 +14,24 @@
             echo $lines[$i].": $splits (total: $total)\n";
       }
       return $total;
+   }
+   function part2($lines){
+      $total = getPaths($lines, 1, strpos($lines[0], "S"));
+      return $total;
+   }
+   function getPaths($lines, $row, $column){
+      $paths = 0;
+      $char = $lines[$row][$column] ?? "END";
+      if($char == "."){
+         $paths += getPaths($lines, $row + 1, $column);
+      } else if ($char == "^") {
+         $paths += getPaths($lines, $row, $column - 1);
+         $paths += getPaths($lines, $row, $column + 1);
+      } else {
+         return 1;
+      }
+      
+      return $paths;
    }
    function getBeamPositions($line){
       $positions = [];
