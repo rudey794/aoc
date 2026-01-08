@@ -16,22 +16,24 @@
       return $total;
    }
    function part2($lines){
-      $total = getPaths($lines, 1, strpos($lines[0], "S"));
+      $memo = [];
+      $total = getPaths($memo, $lines, 1, strpos($lines[0], "S"));
       return $total;
    }
-   function getPaths($lines, $row, $column){
+   function getPaths(&$memo, $lines, $row, $column){
       $paths = 0;
+      if(isset($memo[$row][$column])) return $memo[$row][$column];
       $char = $lines[$row][$column] ?? "END";
       if($char == "."){
-         $paths += getPaths($lines, $row + 1, $column);
+         $paths += getPaths($memo, $lines, $row + 1, $column);
       } else if ($char == "^") {
-         $paths += getPaths($lines, $row, $column - 1);
-         $paths += getPaths($lines, $row, $column + 1);
+         $paths += getPaths($memo, $lines, $row, $column - 1);
+         $paths += getPaths($memo, $lines, $row, $column + 1);
       } else {
-         return 1;
+         $paths = 1;
       }
       
-      return $paths;
+      return $memo[$row][$column] = $paths;
    }
    function getBeamPositions($line){
       $positions = [];
